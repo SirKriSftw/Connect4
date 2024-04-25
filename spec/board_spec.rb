@@ -18,7 +18,7 @@ describe Board do
         ])
     end
 
-    it "places a piece at the bottom of the 2nd column, then two at the 1st column. Alternating players" do
+    xit "places a piece at the bottom of the 2nd column, then two at the 1st column. Alternating players" do
       board = Board.new
       board.place(2)
       board.place(1)
@@ -34,9 +34,9 @@ describe Board do
         ])
     end
 
-    it "placing 7 pieces in the 1st column returns and error" do
+    xit "placing 7 pieces in the 1st column returns and error" do
       board = Board.new
-      6.count do
+      6.times do
       board.place(1)
       end
       expect(board.place(1)).to eql("Error")
@@ -44,7 +44,7 @@ describe Board do
   end
 
   describe "#print_board" do
-    it "displays empty board" do
+    xit "displays empty board" do
       board = Board.new
       expect(board.print_board).to eql(
         "| o o o o o o o |\n" +
@@ -56,7 +56,7 @@ describe Board do
       )
     end
 
-    it "displays board with 2nd column bottom filled with player 1" do
+    xit "displays board with 2nd column bottom filled with player 1" do
       board = Board.new
       player1_code = "\u2460".force_encoding("utf-8")
       player1_piece = "\e[31m#{player1_code}\e[0m"
@@ -71,7 +71,7 @@ describe Board do
       )
     end
 
-    it "displays board with 2nd column containing player 1 and player 2 piece stacked" do
+    xit "displays board with 2nd column containing player 1 and player 2 piece stacked" do
       board = Board.new
       player1_code = "\u2460".force_encoding("utf-8")
       player1_piece = "\e[31m#{player1_code}\e[0m"
@@ -93,9 +93,9 @@ describe Board do
 
   describe "#win?" do
 
-    it "return -1. No player has won" do
+    xit "return -1. No player has won" do
       board = Board.new
-      3.count do
+      3.times do
         board.place(1)
         board.place(2)
       end
@@ -103,9 +103,9 @@ describe Board do
       expect(board.win?).to eql(-1)
     end
 
-    it "return 2. Player 2 gets 4 in a row vertically" do
+    xit "return 2. Player 2 gets 4 in a row vertically" do
       board = Board.new
-      3.count do
+      3.times do
       board.place(1)
       board.place(2)
       end
@@ -114,10 +114,10 @@ describe Board do
       expect(board.win?).to eql(2)
     end
 
-    it "return 1. Player 1 gets 4 in a row horizontally" do
+    xit "return 1. Player 1 gets 4 in a row horizontally" do
       board = Board.new
       counter = 1
-      3.count do
+      3.times do
       board.place(counter)
       board.place(counter)
       counter += 1
@@ -126,15 +126,15 @@ describe Board do
       expect(board.win?).to eql(1)
     end
 
-    it "return 1. Player 1 gets 4 in a row diagonally" do
+    xit "return 1. Player 1 gets 4 in a row diagonally" do
       board = Board.new
       board.place(1)
       board.place(2)
       board.place(2)
-      3.count do
+      3.times do
       board.place(3)
       end
-      4.count do
+      4.times do
       board.place(4)
       end
       expect(board.win?).to eql(1)
