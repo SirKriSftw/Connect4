@@ -14,6 +14,25 @@ class Board
     @most_recent_piece = -1
   end
 
+  def play
+    # While no one has won and there is still space play
+    while (win? == -1 && has_space?) do
+      print_board
+      while(choice >= 1 && choice <= 7) do
+      print "Player #{curr_player} what column would you like to place your piece? (1-7)"
+      choice = get.chomp
+      end
+      place(choice)
+    end
+
+  end
+
+  def has_space?
+    @spots.any? do |col|
+      col.any? {|spot| spot == nil}
+    end
+  end
+
   def place(col)
     col = col - 1
     avaliable_slot = @spots[col].index(nil)
@@ -56,6 +75,7 @@ class Board
   end
 
   def win?
+    return -1 if @most_recent_piece == -1
     return win_vertically? if win_vertically? != -1
     return win_hortizontally? if win_hortizontally? != -1
     return win_diagonally? if win_diagonally? != -1
