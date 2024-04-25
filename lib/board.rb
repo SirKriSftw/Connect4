@@ -66,6 +66,7 @@ class Board
     # Only check if the most recently placed piece wins
     @curr_player == 1 ? last_player = 2 : last_player = 1
     check = @spots[@most_recent_piece]
+    # Set last_piece to last player to play and do not update. Because only last_player can win
     last_piece = last_player
     counter = 1
 
@@ -85,15 +86,26 @@ class Board
   def win_hortizontally?
     # Only check if the most recently placed piece wins
     @curr_player == 1 ? last_player = 2 : last_player = 1
-    check = @spots[@most_recent_piece].reverse.index(last_player)
-
+    # Get index of the last played spot
+    check = (HEIGHT - 1) - @spots[@most_recent_piece].reverse.index(last_player)
+    # Set last_piece to last player to play and do not update. Because only last_player can win
     last_piece = last_player
     counter = 1
 
+    @spots.each do |col|
+      if(col[check] == last_piece)
+        counter += 1
+      else
+        counter = 1
+      end
+      if(counter == 4)
+        return last_piece
+      end
     end
     return -1
   end
 
   def win_diagonally?
+    return -1
   end
 end

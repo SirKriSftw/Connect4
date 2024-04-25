@@ -114,7 +114,7 @@ describe Board do
       expect(board.win?).to eql(2)
     end
 
-    xit "return 1. Player 1 gets 4 in a row horizontally" do
+    it "return 1. Player 1 gets 4 in a row horizontally" do
       board = Board.new
       counter = 1
       3.times do
