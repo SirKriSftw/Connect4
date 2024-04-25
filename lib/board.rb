@@ -106,6 +106,24 @@ class Board
   end
 
   def win_diagonally?
+    # Only check if the most recently placed piece wins
+    @curr_player == 1 ? last_player = 2 : last_player = 1
+    # Get index of the last played spot
+    check = (HEIGHT - 1) - @spots[@most_recent_piece].reverse.index(last_player)
+    # Set last_piece to last player to play and do not update. Because only last_player can win
+    last_piece = last_player
+    counter = 1
+    top_left = 0
+    top_right = 0
+    bot_left = 0
+    bot_right = 0
+
+    right_half = @spots[@most_recent_piece + 1 .. @spots.length-1]
+    p right_half
+    left_half = @spots[0 .. @most_recent_piece - 1]
+    p left_half
+
+
     return -1
   end
 end

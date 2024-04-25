@@ -131,12 +131,14 @@ describe Board do
       board.place(1)
       board.place(2)
       board.place(2)
-      3.times do
       board.place(3)
-      end
-      4.times do
+      board.place(3)
       board.place(4)
-      end
+      board.place(3)
+      board.place(4)
+      board.place(4)
+      board.place(5)
+      board.place(4)
       expect(board.win?).to eql(1)
     end
   end
