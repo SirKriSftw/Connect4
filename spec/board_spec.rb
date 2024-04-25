@@ -103,7 +103,7 @@ describe Board do
       expect(board.win?).to eql(-1)
     end
 
-    xit "return 2. Player 2 gets 4 in a row vertically" do
+    it "return 2. Player 2 gets 4 in a row vertically" do
       board = Board.new
       3.times do
       board.place(1)

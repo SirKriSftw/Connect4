@@ -7,6 +7,5 @@ item2 = "\u2461".force_encoding("utf-8")
 #puts "\e[33m#{item2}\e[0m"
 board = Board.new
 
-board.place(2)
-board.place(2)
-p board.print_board
+puts board.print_board
+board.win?

@@ -11,6 +11,7 @@ class Board
     end
 
     @curr_player = 1
+    @most_recent_piece = -1
   end
 
   def place(col)
@@ -18,6 +19,7 @@ class Board
     avaliable_slot = @spots[col].index(nil)
     return "Error" if avaliable_slot == nil
     @spots[col][avaliable_slot] = @curr_player
+    @most_recent_piece = col
     if @curr_player == 1
       @curr_player = 2
     else
@@ -54,5 +56,21 @@ class Board
   end
 
   def win?
+    # Only check if the most recently placed piece wins
+    check = @spots[@most_recent_piece]
+    last_piece = 0
+    counter = 1
+    # First check vertical win
+    check.each do |piece|
+      if (piece == last_piece)
+        counter += 1
+      else
+        last_piece = piece
+        counter = 1
+      end
+      if(counter == 4)
+        return last_piece
+      end
+    end
   end
 end
