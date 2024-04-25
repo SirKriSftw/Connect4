@@ -2,6 +2,7 @@ class Board
   HEIGHT = 6
   WIDTH = 7
 
+  attr_accessor :spots
   def initialize
     @spots = []
 
@@ -13,8 +14,8 @@ class Board
   end
 
   def place(col)
+    col = col - 1
     avaliable_slot = @spots[col].index(nil)
-    p avaliable_slot
     return "Error" if avaliable_slot == nil
     @spots[col][avaliable_slot] = @curr_player
     if @curr_player == 1
