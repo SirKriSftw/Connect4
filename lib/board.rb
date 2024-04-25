@@ -10,6 +10,7 @@ class Board
   def play
     play_again = true
     while(play_again) do
+      system("cls")
       reset_board
       # While no one has won and there is still space play
       while (win? == -1 && has_space?) do
@@ -48,7 +49,6 @@ class Board
   end
 
   def reset_board
-    system("cls")
     @spots = []
 
     WIDTH.times do
@@ -168,39 +168,52 @@ class Board
 
 
     left_half.each_with_index do |col, index|
-      if (col[check - (@most_recent_piece - index)] == last_piece)
+      bl_broken = false
+      tl_broken = false
+      if (col[check - (@most_recent_piece - index)] == last_piece && !bl_broken)
         bot_left += 1
       else
-        break
+        bl_broken = true
       end
 
-      if (col[check + (@most_recent_piece - index)] == last_piece)
+      if (col[check + (@most_recent_piece - index)] == last_piece && !tl_broken)
         top_left += 1
       else
-        break
+        tl_broken = true
       end
 
       if(bot_left == 3 || top_left == 3)
         return last_piece
       end
+
+      if(bl_broken && tl_broken)
+        break
+      end
     end
 
     right_half.each_with_index do |col, index|
-      if (col[check - (@most_recent_piece - index)] == last_piece)
+      br_broken = false
+      tr_broken = false
+      if (col[check - (@most_recent_piece - index)] == last_piece && !br_broken)
         bot_right += 1
       else
-        break
+        br_broken = true
       end
 
-      if (col[check + (@most_recent_piece - index)] == last_piece)
+      if (col[check + (@most_recent_piece - index)] == last_piece && !tr_broken)
         top_right += 1
       else
-        break
+        bl_broken = true
       end
 
       if(bot_right == 3 || top_right == 3 || bot_right + top_left == 3 || bot_left + top_right == 3)
         return last_piece
       end
+
+      if(br_broken && tr_broken)
+        break
+      end
+
     end
     return -1
   end
