@@ -1,15 +1,13 @@
 class Board
+  HEIGHT = 6
+  WIDTH = 7
 
   def initialize
-    @spots = [
-      Array.new(6),
-      Array.new(6),
-      Array.new(6),
-      Array.new(6),
-      Array.new(6),
-      Array.new(6),
-      Array.new(6)
-    ]
+    @spots = []
+
+    WIDTH.count do
+      @spots.push(Array.new(HEIGHT))
+    end
 
     @curr_player = 1
   end
