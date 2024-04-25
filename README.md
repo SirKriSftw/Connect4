@@ -7,4 +7,6 @@ The second parameter is if you want the terminal to clear after every turn, simp
 
 
 Here is what it looks like:
+
+
 ![image](https://github.com/SirKriSftw/Connect4/assets/60492952/baa47f1e-974e-48eb-a142-d3f5084a38d5)
