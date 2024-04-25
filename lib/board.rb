@@ -4,6 +4,49 @@ class Board
 
   attr_accessor :spots
   def initialize
+    reset_board
+  end
+
+  def play
+    play_again = true
+    while(play_again) do
+      reset_board
+      # While no one has won and there is still space play
+      while (win? == -1 && has_space?) do
+        puts print_board
+        choice = 0
+        while(!(choice >= 1 && choice <= 7)) do
+        print "Player #{@curr_player} what column would you like to place your piece? (1-7)"
+        choice = gets.chomp.to_i
+        end
+        output = place(choice)
+        if(output == "Error")
+          puts "\e[31mCannot place a piece in column #{choice} because it is full!\e[0m"
+        end
+      end
+      if(win? == 1)
+        puts print_board
+        puts "Player 1 won!"
+      elsif(win? == 2)
+        puts print_board
+        puts "Player 2 won!"
+      else
+        puts print_board
+        puts "It is a draw!"
+      end
+      print "Play again?"
+      input = gets.chomp
+      if input.downcase == "n" || input.downcase == "n" then play_again = false end
+    end
+  end
+
+  def has_space?
+    @spots.any? do |col|
+      col.any? {|spot| spot == nil}
+    end
+  end
+
+  def reset_board
     @spots = []
 
     WIDTH.times do
@@ -12,38 +55,6 @@ class Board
 
     @curr_player = 1
     @most_recent_piece = -1
-  end
-
-  def play
-    # While no one has won and there is still space play
-    while (win? == -1 && has_space?) do
-      puts print_board
-      choice = 0
-      while(!(choice >= 1 && choice <= 7)) do
-      print "Player #{@curr_player} what column would you like to place your piece? (1-7)"
-      choice = gets.chomp.to_i
-      end
-      output = place(choice)
-      if(output == "Error")
-        puts "\e[31mCannot place a piece in column #{choice} because it is full!\e[0m"
-      end
-    end
-    if(win? == 1)
-      puts print_board
-      puts "Player 1 won!"
-    elsif(win? == 2)
-      puts print_board
-      puts "Player 2 won!"
-    else
-      puts print_board
-      puts "It is a draw!"
-    end
-  end
-
-  def has_space?
-    @spots.any? do |col|
-      col.any? {|spot| spot == nil}
-    end
   end
 
   def place(col)
