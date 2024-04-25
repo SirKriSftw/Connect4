@@ -17,14 +17,22 @@ class Board
   def play
     # While no one has won and there is still space play
     while (win? == -1 && has_space?) do
-      print_board
-      while(choice >= 1 && choice <= 7) do
-      print "Player #{curr_player} what column would you like to place your piece? (1-7)"
-      choice = get.chomp
+      puts print_board
+      choice = 0
+      while(!(choice >= 1 && choice <= 7)) do
+      print "Player #{@curr_player} what column would you like to place your piece? (1-7)"
+      choice = gets.chomp.to_i
       end
       place(choice)
     end
-
+    if(win? == 1)
+      puts print_board
+      puts "Player 1 won!"
+    elsif(win? == 2)
+      puts "Player 2 won!"
+    else
+      puts "It is a draw!"
+    end
   end
 
   def has_space?
@@ -88,13 +96,13 @@ class Board
     check = @spots[@most_recent_piece]
     # Set last_piece to last player to play and do not update. Because only last_player can win
     last_piece = last_player
-    counter = 1
+    counter = 0
 
     check.each do |piece|
       if (piece == last_piece)
         counter += 1
       else
-        counter = 1
+        counter = 0
       end
       if(counter == 4)
         return last_piece
@@ -110,13 +118,13 @@ class Board
     check = (HEIGHT - 1) - @spots[@most_recent_piece].reverse.index(last_player)
     # Set last_piece to last player to play and do not update. Because only last_player can win
     last_piece = last_player
-    counter = 1
+    counter = 0
 
     @spots.each do |col|
       if(col[check] == last_piece)
         counter += 1
       else
-        counter = 1
+        counter = 0
       end
       if(counter == 4)
         return last_piece
@@ -132,7 +140,6 @@ class Board
     check = (HEIGHT - 1) - @spots[@most_recent_piece].reverse.index(last_player)
     # Set last_piece to last player to play and do not update. Because only last_player can win
     last_piece = last_player
-    counter = 1
     top_left = 0
     bot_left = 0
     top_right = 0
