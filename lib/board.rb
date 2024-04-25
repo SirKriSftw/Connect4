@@ -114,16 +114,49 @@ class Board
     last_piece = last_player
     counter = 1
     top_left = 0
-    top_right = 0
     bot_left = 0
+    top_right = 0
     bot_right = 0
 
-    right_half = @spots[@most_recent_piece + 1 .. @spots.length-1]
-    p right_half
     left_half = @spots[0 .. @most_recent_piece - 1]
-    p left_half
+    right_half = @spots[@most_recent_piece + 1 .. @spots.length-1]
 
 
+    left_half.each_with_index do |col, index|
+      if (col[check - (@most_recent_piece - index)] == last_piece)
+        bot_left += 1
+      else
+        bot_left = 0
+      end
+
+      if (col[check + (@most_recent_piece - index)] == last_piece)
+        top_left += 1
+      else
+        top_left = 0
+      end
+
+      if(bot_left == 3 || top_left == 3)
+        return last_piece
+      end
+    end
+
+    right_half.each_with_index do |col, index|
+      if (col[check - (@most_recent_piece - index)] == last_piece)
+        bot_right += 1
+      else
+        bot_right = 0
+      end
+
+      if (col[check + (@most_recent_piece - index)] == last_piece)
+        top_right += 1
+      else
+        top_right = 0
+      end
+
+      if(bot_right == 3 || top_right == 3 || bot_right + top_left == 3 || bot_left + top_right == 3)
+        return last_piece
+      end
+    end
     return -1
   end
 end
