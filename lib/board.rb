@@ -16,7 +16,8 @@ class Board
         puts print_board
         choice = 0
         while(!(choice >= 1 && choice <= 7)) do
-        print "Player #{@curr_player} what column would you like to place your piece? (1-7)"
+        if(@curr_player == 1) then print "\e[31mPlayer #{@curr_player}\e[0m what column would you like to place your piece? (1-7)" else print "\e[33mPlayer #{@curr_player}\e[0m what column would you like to place your piece? (1-7)" end
+
         choice = gets.chomp.to_i
         end
         output = place(choice)
@@ -47,6 +48,7 @@ class Board
   end
 
   def reset_board
+    system("cls")
     @spots = []
 
     WIDTH.times do
