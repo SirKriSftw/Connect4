@@ -23,14 +23,19 @@ class Board
       print "Player #{@curr_player} what column would you like to place your piece? (1-7)"
       choice = gets.chomp.to_i
       end
-      place(choice)
+      output = place(choice)
+      if(output == "Error")
+        puts "\e[31mCannot place a piece in column #{choice} because it is full!\e[0m"
+      end
     end
     if(win? == 1)
       puts print_board
       puts "Player 1 won!"
     elsif(win? == 2)
+      puts print_board
       puts "Player 2 won!"
     else
+      puts print_board
       puts "It is a draw!"
     end
   end
@@ -153,13 +158,13 @@ class Board
       if (col[check - (@most_recent_piece - index)] == last_piece)
         bot_left += 1
       else
-        bot_left = 0
+        break
       end
 
       if (col[check + (@most_recent_piece - index)] == last_piece)
         top_left += 1
       else
-        top_left = 0
+        break
       end
 
       if(bot_left == 3 || top_left == 3)
@@ -171,13 +176,13 @@ class Board
       if (col[check - (@most_recent_piece - index)] == last_piece)
         bot_right += 1
       else
-        bot_right = 0
+        break
       end
 
       if (col[check + (@most_recent_piece - index)] == last_piece)
         top_right += 1
       else
-        top_right = 0
+        break
       end
 
       if(bot_right == 3 || top_right == 3 || bot_right + top_left == 3 || bot_left + top_right == 3)
