@@ -7,13 +7,14 @@ class Board
     reset_board
   end
 
-  def play
+  def play(play_clear = true, turn_clear = false)
     play_again = true
     while(play_again) do
-      system("cls")
+      if play_clear then system("cls") end
       reset_board
       # While no one has won and there is still space play
       while (win? == -1 && has_space?) do
+        if turn_clear then system("cls") end
         puts print_board
         choice = 0
         while(!(choice >= 1 && choice <= 7)) do
