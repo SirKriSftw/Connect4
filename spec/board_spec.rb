@@ -91,4 +91,52 @@ describe Board do
     end
   end
 
+  describe "#win?" do
+
+    it "return false. No player has won" do
+      board = Board.new
+      3.count do
+        board.place(1)
+        board.place(2)
+      end
+      board.place(2)
+      expect(board.win?).to eql(false)
+    end
+
+    it "return true. Player 1 gets 4 in a row vertically" do
+      board = Board.new
+      3.count do
+      board.place(1)
+      board.place(2)
+      end
+      board.place(1)
+      expect(board.win?).to eql(true)
+    end
+
+    it "return true. Player 1 gets 4 in a row horizontally" do
+      board = Board.new
+      counter = 1
+      3.count do
+      board.place(counter)
+      board.place(counter)
+      counter += 1
+      end
+      board.place(4)
+      expect(board.win?).to eql(true)
+    end
+
+    it "return true. Player 1 gets 4 in a row diagonally" do
+      board = Board.new
+      board.place(1)
+      board.place(2)
+      board.place(2)
+      3.count do
+      board.place(3)
+      end
+      4.count do
+      board.place(4)
+      end
+      expect(board.win?).to eql(true)
+    end
+  end
 end
