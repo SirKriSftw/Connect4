@@ -27,6 +27,30 @@ class Board
   end
 
   def print_board
+    # A red circle with 1 in the middle
+    player1_code = "\u2460".force_encoding("utf-8")
+    player1_piece = "\e[31m#{player1_code}\e[0m"
+
+    # A yellow circle with 2 in the middle
+    player2_code = "\u2461".force_encoding("utf-8")
+    player2_piece = "\e[33m#{player2_code}\e[0m"
+
+    output = ""
+    counter = -1
+    HEIGHT.times do
+      output += "| "
+      @spots.each do |col|
+        if col[counter] == nil
+          output += "o "
+        else
+          col[counter] == 1 ? output += "#{player1_piece} " : output += "#{player2_piece} "
+        end
+      end
+      counter -= 1
+      output += "|\n"
+    end
+
+    output
   end
 
   def win?
