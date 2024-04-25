@@ -109,6 +109,7 @@ describe Board do
       board.place(1)
       board.place(2)
       end
+      board.place(3)
       board.place(2)
       expect(board.win?).to eql(2)
     end
