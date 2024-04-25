@@ -56,6 +56,11 @@ class Board
   end
 
   def win?
+    return win_vertically? if win_vertically? != -1
+    return -1
+  end
+
+  def win_vertically?
     # Only check if the most recently placed piece wins
     check = @spots[@most_recent_piece]
     last_piece = 0
@@ -72,5 +77,6 @@ class Board
         return last_piece
       end
     end
+    return -1
   end
 end

@@ -93,7 +93,7 @@ describe Board do
 
   describe "#win?" do
 
-    xit "return -1. No player has won" do
+    it "return -1. No player has won" do
       board = Board.new
       3.times do
         board.place(1)
