@@ -2,4 +2,4 @@ require_relative "board"
 
 board = Board.new
 
-board.play()
+board.play(true, false)
