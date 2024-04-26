@@ -33,9 +33,17 @@ class Game
   end
 
   def print_board_with_header
-    puts "\e[47m  \e[30m1 2 3 4 5 6 7  \e[0m"
+    header = "\e[47m  \e[30m"
+    counter = 1
+    @board.width.times do
+      header += "#{counter} "
+      counter += 1
+    end
+    header +=  " \e[0m"
+
+    puts header
     puts @board.print_board
-    puts "\e[47m  \e[30m1 2 3 4 5 6 7  \e[0m"
+    puts header
   end
 
   def ask_options
