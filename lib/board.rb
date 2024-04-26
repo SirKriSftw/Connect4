@@ -7,7 +7,7 @@ class Board
     reset_board
   end
 
-  def play(play_clear = true, turn_clear = false, ai = false, random = false)
+  def play(play_clear = true, turn_clear = false, ai = true, random = false)
     play_again = true
     while(play_again) do
       if play_clear then system("cls") end
