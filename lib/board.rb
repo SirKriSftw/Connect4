@@ -7,7 +7,7 @@ class Board
     reset_board
   end
 
-  def play(play_clear = true, turn_clear = false)
+  def play(play_clear = true, turn_clear = false, ai = false, random = false)
     play_again = true
     while(play_again) do
       if play_clear then system("cls") end
@@ -17,22 +17,43 @@ class Board
         if turn_clear then system("cls") end
         puts print_board
         choice = 0
-        while(!(choice >= 1 && choice <= 7)) do
-        if(@curr_player == 1) then print "\e[31mPlayer #{@curr_player}\e[0m what column would you like to place your piece? (1-7)" else print "\e[33mPlayer #{@curr_player}\e[0m what column would you like to place your piece? (1-7)" end
+        unless (random)
+          unless(ai && @curr_player == 2)
+            while(!(choice >= 1 && choice <= 7)) do
+            if(@curr_player == 1) then print "\e[31mPlayer #{@curr_player}\e[0m what column would you like to place your piece? (1-7)" else print "\e[33mPlayer #{@curr_player}\e[0m what column would you like to place your piece? (1-7)" end
 
-        choice = gets.chomp.to_i
+            choice = gets.chomp.to_i
+            end
+            output = place(choice)
+          else
+            choice = rand(1..7)
+            print "\n\n\nAI chose #{choice}\n"
+            place(choice)
+          end
+        else
+          choice = rand(1..7)
+          print "\n\n\nAI##{@curr_player} chose #{choice}\n"
+          place(choice)
         end
-        output = place(choice)
         if(output == "Error")
           puts "\e[31mCannot place a piece in column #{choice} because it is full!\e[0m"
         end
       end
-      if(win? == 1)
+      if(win? == 1 && !random)
         puts print_board
         puts "Player 1 won!"
-      elsif(win? == 2)
+      elsif(win? == 1)
+        puts print_board
+        puts "AI#1 won!"
+      elsif(win? == 2 && !ai)
         puts print_board
         puts "Player 2 won!"
+      elsif(win? == 2 && random)
+        puts print_board
+        puts "AI#2 won!"
+      elsif(win? == 2)
+        puts print_board
+        puts "AI won!"
       else
         puts print_board
         puts "It is a draw!"
@@ -66,11 +87,7 @@ class Board
     return "Error" if avaliable_slot == nil
     @spots[col][avaliable_slot] = @curr_player
     @most_recent_piece = col
-    if @curr_player == 1
-      @curr_player = 2
-    else
-      @curr_player = 1
-    end
+    @curr_player == 1 ? @curr_player = 2 : @curr_player = 1
     @spots
   end
 
@@ -104,7 +121,7 @@ class Board
   def win?
     return -1 if @most_recent_piece == -1
     return win_vertically? if win_vertically? != -1
-    return win_hortizontally? if win_hortizontally? != -1
+    return win_horizontally? if win_horizontally? != -1
     return win_diagonally? if win_diagonally? != -1
     return -1
   end
@@ -130,7 +147,7 @@ class Board
     return -1
   end
 
-  def win_hortizontally?
+  def win_horizontally?
     # Only check if the most recently placed piece wins
     @curr_player == 1 ? last_player = 2 : last_player = 1
     # Get index of the last played spot
@@ -164,50 +181,65 @@ class Board
     top_right = 0
     bot_right = 0
 
-    left_half = @spots[0 .. @most_recent_piece - 1]
-    right_half = @spots[@most_recent_piece + 1 .. @spots.length-1]
+    left_half = []
+    right_half = []
+    unless @most_recent_piece == 0 then left_half = @spots[0 .. @most_recent_piece - 1].reverse end
+    unless @most_recent_piece == WIDTH then right_half = @spots[@most_recent_piece + 1 .. @spots.length-1] end
 
-
+    tl_broken = false
+    bl_broken = false
     left_half.each_with_index do |col, index|
-      bl_broken = false
-      tl_broken = false
-      if (col[check - (@most_recent_piece - index)] == last_piece && !bl_broken)
-        bot_left += 1
-      else
-        bl_broken = true
+      tl_offset = check + (index + 1)
+      bl_offset = check - (index + 1)
+
+      unless tl_offset < 0 || tl_offset >= HEIGHT
+        if (col[tl_offset] == last_piece && !tl_broken)
+          top_left += 1
+        else
+          tl_broken = true
+        end
       end
 
-      if (col[check + (@most_recent_piece - index)] == last_piece && !tl_broken)
-        top_left += 1
-      else
-        tl_broken = true
+      unless bl_offset < 0 || bl_offset >= HEIGHT
+        if (col[bl_offset] == last_piece && !bl_broken)
+          bot_left += 1
+        else
+          bl_broken = true
+        end
       end
 
-      if(bot_left == 3 || top_left == 3)
+      if(top_left == 4 || bot_left  == 4)
         return last_piece
       end
 
-      if(bl_broken && tl_broken)
+      if(tl_broken && bl_broken)
         break
       end
     end
 
+    tr_broken = false
+    br_broken = false
     right_half.each_with_index do |col, index|
-      br_broken = false
-      tr_broken = false
-      if (col[check - (@most_recent_piece - index)] == last_piece && !br_broken)
-        bot_right += 1
-      else
-        br_broken = true
+      tr_offset = check + (index + 1)
+      br_offset = check - (index + 1)
+
+
+      unless tr_offset < 0 || tr_offset >= HEIGHT
+        if (col[tr_offset] == last_piece && !tr_broken)
+          top_right += 1
+        else
+          tr_broken = true
+        end
       end
 
-      if (col[check + (@most_recent_piece - index)] == last_piece && !tr_broken)
-        top_right += 1
-      else
-        bl_broken = true
+      unless br_offset < 0 || br_offset >= HEIGHT
+        if (col[br_offset] == last_piece && !br_broken)
+          bot_right += 1
+        else
+          br_broken = true
+        end
       end
-
-      if(bot_right == 3 || top_right == 3 || bot_right + top_left == 3 || bot_left + top_right == 3)
+      if(bot_right == 4 || top_right == 4 || bot_right + top_left >= 4 || bot_left + top_right >= 4)
         return last_piece
       end
 
