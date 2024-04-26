@@ -7,6 +7,7 @@ There are 4 options asked whenever you start a new game:
   - Would you like to clear the terminal after every turn?
   - Would you like to face an AI?
   - Would you like two AIs to go against each other?
+
 If you just press enter for all options, only play against AI will set to true by default. Otherwise you Y and N to choose to enable/disable option
 After a match you can choose to play again with same options or choose to not play again and change options
 
