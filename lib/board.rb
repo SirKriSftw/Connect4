@@ -26,14 +26,18 @@ class Board
             end
             output = place(choice)
           else
-            choice = rand(1..7)
-            print "\n\n\nAI chose #{choice}\n"
-            place(choice)
+            while(!(choice >= 1 && choice <= 7)) do
+              choice = rand(1..7)
+              print "\n\n\n\e[33mAI chose #{choice}\e[0m\n"
+              output = place(choice)
+            end
           end
         else
-          choice = rand(1..7)
-          print "\n\n\nAI##{@curr_player} chose #{choice}\n"
-          place(choice)
+          while(!(choice >= 1 && choice <= 7)) do
+            choice = rand(1..7)
+            if(@curr_player == 1) then puts "\e[31mAI##{@curr_player}\e[0m chose #{choice}" else puts "\e[33mAI##{@curr_player}\e[0m chose #{choice}" end
+            output = place(choice)
+          end
         end
         if(output == "Error")
           puts "\e[31mCannot place a piece in column #{choice} because it is full!\e[0m"
@@ -45,7 +49,7 @@ class Board
       elsif(win? == 1)
         puts print_board
         puts "AI#1 won!"
-      elsif(win? == 2 && !ai)
+      elsif(win? == 2 && !ai && !random)
         puts print_board
         puts "Player 2 won!"
       elsif(win? == 2 && random)
@@ -181,13 +185,17 @@ class Board
     top_right = 0
     bot_right = 0
 
+    tl_broken = false
+    bl_broken = false
+    tr_broken = false
+    br_broken = false
+
     left_half = []
     right_half = []
     unless @most_recent_piece == 0 then left_half = @spots[0 .. @most_recent_piece - 1].reverse end
     unless @most_recent_piece == WIDTH then right_half = @spots[@most_recent_piece + 1 .. @spots.length-1] end
 
-    tl_broken = false
-    bl_broken = false
+
     left_half.each_with_index do |col, index|
       tl_offset = check + (index + 1)
       bl_offset = check - (index + 1)
@@ -208,7 +216,7 @@ class Board
         end
       end
 
-      if(top_left == 4 || bot_left  == 4)
+      if(top_left == 3 || bot_left  == 3)
         return last_piece
       end
 
@@ -217,12 +225,10 @@ class Board
       end
     end
 
-    tr_broken = false
-    br_broken = false
+
     right_half.each_with_index do |col, index|
       tr_offset = check + (index + 1)
       br_offset = check - (index + 1)
-
 
       unless tr_offset < 0 || tr_offset >= HEIGHT
         if (col[tr_offset] == last_piece && !tr_broken)
@@ -239,11 +245,11 @@ class Board
           br_broken = true
         end
       end
-      if(bot_right == 4 || top_right == 4 || bot_right + top_left >= 4 || bot_left + top_right >= 4)
+      if(bot_right == 3 || top_right == 3 || bot_right + top_left >= 3 || bot_left + top_right >= 3)
         return last_piece
       end
 
-      if(br_broken && tr_broken)
+      if(tr_broken && br_broken)
         break
       end
 
