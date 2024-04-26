@@ -15,14 +15,18 @@ class Game
     while(play_again) do
       while(@board.win? == -1 && @board.has_space?) do
         if @clear_turn then system("cls") || system("clear") end
-        puts "\n\e[47m  \e[30m1 2 3 4 5 6 7  \e[0m"
-        puts @board.print_board
-        puts "\e[47m  \e[30m1 2 3 4 5 6 7  \e[0m"
+        print_board_with_header
         if @random then play_random end
         if @ai && @board.curr_player == 2 then play_ai end
         if !@random && !(@ai && @board.curr_player == 2) then play_human end
       end
     end
+  end
+
+  def print_board_with_header
+    puts "\e[47m  \e[30m1 2 3 4 5 6 7  \e[0m"
+    puts @board.print_board
+    puts "\e[47m  \e[30m1 2 3 4 5 6 7  \e[0m"
   end
 
   def ask_options
@@ -46,14 +50,27 @@ class Game
     end
   end
 
+  def play_ai
+    loop do
+      choice = rand(1..@board.width)
+      output = @board.place(choice)
+      unless (output == "Error")
+        puts "\n\e[33mAI\e[0m chose #{choice}"
+        print_board_with_header
+        return
+      end
+    end
+  end
+
   def play_human
+
     loop do
       choice = 0
       while(!(choice > 0 && choice <= @board.width))
         if(@board.curr_player == 1)
-          print "\e[31mPlayer #{@board.curr_player}\e[0m what column would you like to place your piece? (1-7)"
+          print "\n\e[31mPlayer #{@board.curr_player}\e[0m what column would you like to place your piece? (1-7): "
         else
-          print "\e[33mPlayer #{@board.curr_player}\e[0m what column would you like to place your piece? (1-7)"
+          print "\n\e[33mPlayer #{@board.curr_player}\e[0m what column would you like to place your piece? (1-7): "
         end
         choice = gets.chomp.to_i
       end
@@ -61,6 +78,8 @@ class Game
       if (output == "Error")
         puts "\e[31mCannot place a piece in column #{choice} because it is full!\e[0m"
       else
+        puts ""
+        if @board.curr_player == 2 then puts "\e[31mPlayer 1\e[0m chose #{choice}" else puts "\e[33mPlayer 2\e[0m chose #{choice}" end
         return
       end
     end
