@@ -7,67 +7,6 @@ class Board
     reset_board
   end
 
-  def play(play_clear = true, turn_clear = false, ai = true, random = false)
-    play_again = true
-    while(play_again) do
-      if play_clear then system("cls") end
-      reset_board
-      # While no one has won and there is still space play
-      while (win? == -1 && has_space?) do
-        if turn_clear then system("cls") end
-        puts print_board
-        choice = 0
-        unless (random)
-          unless(ai && @curr_player == 2)
-            while(!(choice >= 1 && choice <= 7)) do
-              if(@curr_player == 1) then print "\e[31mPlayer #{@curr_player}\e[0m what column would you like to place your piece? (1-7)" else print "\e[33mPlayer #{@curr_player}\e[0m what column would you like to place your piece? (1-7)" end
-
-              choice = gets.chomp.to_i
-            end
-            output = place(choice)
-          else
-            while(!(choice >= 1 && choice <= 7)) do
-              choice = rand(1..7)
-              print "\n\n\n\e[33mAI chose #{choice}\e[0m\n"
-              output = place(choice)
-            end
-          end
-        else
-          while(!(choice >= 1 && choice <= 7)) do
-            choice = rand(1..7)
-            if(@curr_player == 1) then puts "\e[31mAI##{@curr_player}\e[0m chose #{choice}" else puts "\e[33mAI##{@curr_player}\e[0m chose #{choice}" end
-            output = place(choice)
-          end
-        end
-        if(output == "Error")
-          puts "\e[31mCannot place a piece in column #{choice} because it is full!\e[0m"
-        end
-      end
-      if(win? == 1 && !random)
-        puts print_board
-        puts "Player 1 won!"
-      elsif(win? == 1)
-        puts print_board
-        puts "AI#1 won!"
-      elsif(win? == 2 && !ai && !random)
-        puts print_board
-        puts "Player 2 won!"
-      elsif(win? == 2 && random)
-        puts print_board
-        puts "AI#2 won!"
-      elsif(win? == 2)
-        puts print_board
-        puts "AI won!"
-      else
-        puts print_board
-        puts "It is a draw!"
-      end
-      print "Play again?"
-      input = gets.chomp
-      if input.downcase == "n" || input.downcase == "n" then play_again = false end
-    end
-  end
-
   def has_space?
     @spots.any? do |col|
       col.any? {|spot| spot == nil}
