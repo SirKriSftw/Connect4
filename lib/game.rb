@@ -50,12 +50,22 @@ class Game
     end
   end
 
+  def play_random
+    while(@board.win? == -1 && @board.has_space?) do
+      play_ai
+    end
+  end
+
   def play_ai
     loop do
       choice = rand(1..@board.width)
       output = @board.place(choice)
       unless (output == "Error")
-        puts "\n\e[33mAI\e[0m chose #{choice}"
+        if(@curr_player == 2)
+          puts "\n\e[31mAI Player 1\e[0m chose #{choice}"
+        else
+          puts "\n\e[33mAI Player 2\e[0m chose #{choice}"
+        end
         print_board_with_header
         return
       end
