@@ -13,13 +13,22 @@ class Game
     ask_options
     play_again = true
     while(play_again) do
+      @board.reset_board
       while(@board.win? == -1 && @board.has_space?) do
         if @clear_turn then system("cls") || system("clear") end
         print_board_with_header
-        if @random then play_random end
-        if @ai && @board.curr_player == 2 then play_ai end
-        if !@random && !(@ai && @board.curr_player == 2) then play_human end
+        if (@random)
+          play_random
+        elsif (@ai && @board.curr_player == 2)
+          play_ai
+        else
+          play_human
+        end
       end
+      print_winner
+      print "Would you like to play again? (Y/N) "
+      input = gets.chomp.downcase
+      if(input == "n") then play_again = false end
     end
   end
 
@@ -50,6 +59,18 @@ class Game
     end
   end
 
+  def print_winner
+    puts ""
+    if(@board.win? == -1)
+      puts "It is a draw!"
+    elsif(@board.win? == 1)
+      if(@random) then puts "\e[31mAI Player 1\e[0m won!" else puts "\e[31mPlayer 1\e[0m won!" end
+    else
+      if(@ai) then puts "\e[33mAI Player 2\e[0m won!" else puts "\e[33mPlayer 2\e[0m won!" end
+    end
+    print_board_with_header
+  end
+
   def play_random
     while(@board.win? == -1 && @board.has_space?) do
       play_ai
@@ -61,7 +82,7 @@ class Game
       choice = rand(1..@board.width)
       output = @board.place(choice)
       unless (output == "Error")
-        if(@curr_player == 2)
+        if(@board.curr_player == 2)
           puts "\n\e[31mAI Player 1\e[0m chose #{choice}"
         else
           puts "\n\e[33mAI Player 2\e[0m chose #{choice}"
