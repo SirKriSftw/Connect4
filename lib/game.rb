@@ -10,25 +10,31 @@ class Game
   end
 
   def play
-    ask_options
-    play_again = true
-    while(play_again) do
-      @board.reset_board
-      while(@board.win? == -1 && @board.has_space?) do
-        if @clear_turn then system("cls") || system("clear") end
-        print_board_with_header
-        if (@random)
-          play_random
-        elsif (@ai && @board.curr_player == 2)
-          play_ai
-        else
-          play_human
+    change_options = true
+    while(change_options)
+      ask_options
+      play_again = true
+      while(play_again) do
+        @board.reset_board
+        while(@board.win? == -1 && @board.has_space?) do
+          if @clear_turn then system("cls") || system("clear") end
+          print_board_with_header
+          if (@random)
+            play_random
+          elsif (@ai && @board.curr_player == 2)
+            play_ai
+          else
+            play_human
+          end
         end
+        print_winner
+        print "Would you like to play again? (Y/N) "
+        input = gets.chomp.downcase
+        if(input == "n") then play_again = false end
       end
-      print_winner
-      print "Would you like to play again? (Y/N) "
+      print "Would you like to update options and play again? (Y/N) "
       input = gets.chomp.downcase
-      if(input == "n") then play_again = false end
+      if(input == "n") then change_options = false end
     end
   end
 
@@ -96,6 +102,7 @@ class Game
           puts "\n\e[33mAI Player 2\e[0m chose #{choice}"
         end
         print_board_with_header
+        puts ""
         return
       end
     end
