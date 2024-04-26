@@ -1,4 +1,5 @@
 class Board
+  # Change these numbers to effect size of the game board (Would not reccomend anything above like 20 but go for it)
   HEIGHT = 6
   WIDTH = 7
 
