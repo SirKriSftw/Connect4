@@ -1,5 +1,4 @@
-require_relative "board"
+require_relative "game"
 
-board = Board.new
-
-board.play(false, false, true, false)
+game = Game.new
+game.play

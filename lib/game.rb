@@ -14,7 +14,10 @@ class Game
     play_again = true
     while(play_again) do
       while(@board.win? == -1 && @board.has_space?) do
-        
+        if @clear_turn then system("cls") || system("clear") end
+        puts "\n\e[47m  \e[30m1 2 3 4 5 6 7  \e[0m"
+        puts @board.print_board
+
       end
     end
   end
@@ -33,7 +36,7 @@ class Game
     input = gets.chomp
     input.downcase == "n" ? @ai = false : @ai = true
 
-    unless (ai == true)
+    unless (@ai == true)
       print "Would you like to let two AIs go against each other? (Y/N)"
       input = gets.chomp
       input.downcase == "y" ? @random = true : @random = false
