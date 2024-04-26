@@ -11,6 +11,12 @@ class Game
 
   def play
     ask_options
+    play_again = true
+    while(play_again) do
+      while(@board.win? == -1 && @board.has_space?) do
+        
+      end
+    end
   end
 
   def ask_options

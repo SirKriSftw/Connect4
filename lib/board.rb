@@ -2,7 +2,7 @@ class Board
   HEIGHT = 6
   WIDTH = 7
 
-  attr_accessor :spots
+  attr_accessor :curr_player
   def initialize
     reset_board
   end
